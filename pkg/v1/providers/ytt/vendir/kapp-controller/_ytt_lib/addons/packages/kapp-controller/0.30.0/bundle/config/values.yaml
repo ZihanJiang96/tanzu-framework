@@ -7,6 +7,7 @@ kappController:
   createNamespace: true
   globalNamespace: tanzu-package-repo-global
   deployment:
+    serviceCIDR: 100.64.0.0/13
     hostNetwork: null
     priorityClassName: null
     concurrency: 4

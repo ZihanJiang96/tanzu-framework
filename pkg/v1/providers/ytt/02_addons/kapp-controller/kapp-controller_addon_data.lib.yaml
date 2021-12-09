@@ -21,6 +21,7 @@ kappController:
 #@ end
   deployment:
     concurrency: 4
+    serviceCIDR: #@ data.values.SERVICE_CIDR
     hostNetwork: true
     priorityClassName: system-cluster-critical
     apiPort: 10100
