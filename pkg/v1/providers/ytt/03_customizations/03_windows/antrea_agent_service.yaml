@@ -1,0 +1,24 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+#@ if data.values.IS_WINDOWS_WORKLOAD_CLUSTER:
+#@ if data.values.CNI == "antrea":
+#@overlay/match by=overlay.subset({"kind":"KubeadmConfigTemplate"}), expects="1+"
+---
+spec:
+  template:
+    spec:
+      files:
+      #@overlay/append
+      - path: C:\k\antrea_agent_service.ps1
+        content: |
+          Param(
+              [parameter(Mandatory = $true)] [string] $AntreaBin,
+              [parameter(Mandatory = $true)] [string] $AntreaArg,
+              [parameter(Mandatory = $false)] [string] $DelayedTime="60"
+          )
+          # Delay antrea-agent to avoid conflict with kubelet
+          sleep $DelayedTime
+          $antreaCmdLine = $AntreaBin + " " + $AntreaArg
+          Invoke-Expression $antreaCmdLine
+#@ end
+#@ end

@@ -365,9 +365,9 @@ spec:
           $nssm = (Get-Command nssm).Source
           & $nssm set kubelet start SERVICE_AUTO_START
           & $nssm install kube-proxy "C:\k\kube-proxy.exe" "--proxy-mode=userspace --kubeconfig=$KubeProxyConfig --log-dir=C:\var\log\kube-proxy --logtostderr=false --alsologtostderr"
-          & $nssm install antrea-agent "C:\k\antrea\bin\antrea-agent.exe" "--config=C:\k\antrea\etc\antrea-agent.conf --logtostderr=false --log_dir=C:\var\log\antrea --alsologtostderr --log_file_max_size=100 --log_file_max_num=4"
+          $nssm install antrea-agent "powershell.exe" "-ExecutionPolicy Bypass C:\k\antrea_agent_service.ps1 -AntreaBin 'C:\k\antrea\bin\antrea-agent.exe' -AntreaArg '--config=C:\k\antrea\etc\antrea-agent.conf --logtostderr=false --log_dir=C:\var\log\antrea --alsologtostderr --log_file_max_size=100 --log_file_max_num=4' -DelayedTime 60"
           & $nssm set antrea-agent DependOnService kube-proxy ovs-vswitchd
-          & $nssm set antrea-agent Start SERVICE_AUTO_START
+          & $nssm set antrea-agent Start SERVICE_DELAYED_AUTO_START
 
           # Start Services
           start-service kubelet
